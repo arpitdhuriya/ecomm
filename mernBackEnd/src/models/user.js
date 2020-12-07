@@ -1,60 +1,70 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
-    firstName:{
+    firstName: {
         type: String,
-        require:true,
-        trim:true,
-        min:3,
-        max:20 
+        require: true,
+        trim: true,
+        min: 3,
+        max: 20
     },
-    lastName:{
+    lastName: {
         type: String,
-        require:true,
-        trim:true,
-        min:3,
-        max:20 
+        require: true,
+        trim: true,
+        min: 3,
+        max: 20
     },
-    userName:{
-        type:String,
-        require:true,
-        trim:true,
-        unique:true,
-        index:true,
-        lowercase:true
+    userName: {
+        type: String,
+        require: true,
+        trim: true,
+        unique: true,
+        index: true,
+        lowercase: true
     },
-    emai:{
-        type:String,
-        require:true,
-        unique:true,
-        trim:true,
-        lowercase:true,
-        
+    email: {
+        type: String,
+        require: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
+
     },
-    hash_password:{
-        type:String,
-        required:true 
+    hash_password: {
+        type: String,
+        required: true
     },
-    role:{
-        type:String,
-        enum:['user','admin'],
-        default:'user'
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
     },
-    contactNumber:{
-        type:String
+    contactNumber: {
+        type: String
     },
-    profilePicture:{type:String},
-},{timestamps:true});
+      profilePicture: {
+        type: String
+    },
+}, {
+    timestamps: true
+});
 
 userSchema.virtual('password').set(
-    function(password){
-        this.hash_password = bcrypt.hashSync(password,10);
+    function (password) {
+        this.hash_password = bcrypt.hashSync(password, 10);
     }
 );
 
-userSchema.methods ={
-    authenticate : function(){
-        return bcrypt.compareSync(password,this.hash_password);
+userSchema.virtual('fullName').get(
+    function () {
+        return `${this.firstName} +${this.lastName}` ;
+    }
+);
+
+userSchema.methods = {
+    authenticate: function (password) {
+        return bcrypt.compareSync(password, this.hash_password);
     }
 }
-module.exports = mongoose.model('User',userSchema);
+module.exports = mongoose.model('User', userSchema);
