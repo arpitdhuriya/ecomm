@@ -59,7 +59,7 @@ exports.signin = (req, res) => {
                 if (user.authenticate(req.body.password)&&user.role ==='admin') {
                     //token generation
                     const token = jwt.sign({
-                        _id: user._id
+                        _id: user._id,role:user.role
                     }, process.env.JWT_SECRET, {
                         expiresIn: '1h'
                     });
@@ -98,9 +98,3 @@ exports.signin = (req, res) => {
         });
 }
 
-exports.requireSignin =(req,res,next)=>{
-    const token = req.headers.authorization.split(" ")[1]; 
-    const user = jwt.verify(token,process.env.JWT_SECRET);
-    req.user=user;
-    next();
-}

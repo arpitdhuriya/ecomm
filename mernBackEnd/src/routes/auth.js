@@ -4,8 +4,7 @@ const {
 const express = require('express');
 const {
     signup,
-    signin,
-    requireSignin
+    signin
 } = require('../controllers/auth');
 
 const { validateSignUpRequest, isRequestValidated,validateSignInRequest } = require('../validators/auth');

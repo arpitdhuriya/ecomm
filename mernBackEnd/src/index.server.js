@@ -1,20 +1,20 @@
 const express = require('express');
 const env = require('dotenv');
 const app = express();
-const mongoose = require('mongoose');
-const bodyparser = require('body-parser')
+const mongoose = require('mongoose'); 
 
 //routes
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin/auth');
-
+const categoryRoutes = require('./routes/category')
 //env Config
 env.config();
 
 //mondo db connection 
 // mongodb+srv://root:<password>@cluster0.o1x56.mongodb.net/<dbname>?retryWrites=true&w=majority
-app.use(bodyparser())
+app.use(express.json())
 app.use('/api',authRoutes)
+app.use('/api',categoryRoutes)
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.o1x56.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`, {
         useNewUrlParser: true,
